@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Invoice - Trendy Collections</title>
+    <link rel="stylesheet" href="billing.css">
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+</head>
+<body>
+    <div class="page-container">
+        <!-- Header only visible in preview mode -->
+        <div class="header" id="headerControls">
+            <div class="logo">
+                <h1>Trendy Collections</h1>
+            </div>
+            <div class="header-actions">
+                <button id="printInvoice" class="action-button">
+                    <i class="print-icon"></i> Print Invoice
+                </button>
+                <button id="saveAsPdf" class="action-button">
+                    <i class="pdf-icon"></i> Save as PDF
+                </button>
+                <button id="backToOrders" class="action-button secondary">
+                    <i class="back-icon"></i> Back to Orders
+                </button>
+            </div>
+        </div>
+
+        <!-- Invoice Content - will be printed -->
+        <div class="invoice-container" id="invoiceContent">
+            <div class="invoice-header">
+                <div class="store-info">
+                    <h1>Trendy collections</h1>
+                    <p>Your One-Stop Fashion Destination</p>
+                </div>
+                <div class="invoice-title">
+                    <h2>TAX INVOICE</h2>
+                </div>
+            </div>
+
+            <div class="invoice-info">
+                <div class="invoice-details">
+                    <p><strong>Invoice Number:</strong> <span id="invoiceNumber">Loading...</span></p>
+                    <p><strong>Order Date:</strong> <span id="orderDate">Loading...</span></p>
+                    <p><strong>Payment Method:</strong> <span id="paymentMethod">Loading...</span></p>
+                </div>
+                <div class="customer-details">
+                    <h3>Customer Information</h3>
+                    <p><strong>Name:</strong> <span id="customerName">Loading...</span></p>
+                    <p><strong>Email:</strong> <span id="customerEmail">Loading...</span></p>
+                </div>
+            </div>
+
+            <div class="order-summary">
+                <h3>Order Summary</h3>
+                <div class="order-status">
+                    <p><strong>Order ID:</strong> <span id="orderId">Loading...</span></p>
+                    <p><strong>Status:</strong> <span id="orderStatus">Loading...</span></p>
+                </div>
+            </div>
+
+            <div class="item-list">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Item</th>
+                            <th>Details</th>
+                            <th>Price</th>
+                            <th>Qty</th>
+                            <th>Total</th>
+                        </tr>
+                    </thead>
+                    <tbody id="orderItems">
+                        <tr>
+                            <td colspan="5" class="loading-message">Loading order items...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="price-summary">
+                <div class="summary-item">
+                    <span>Subtotal:</span>
+                    <span id="subtotal">Loading...</span>
+                </div>
+                <div class="summary-item">
+                    <span>Tax (10%):</span>
+                    <span id="tax">Loading...</span>
+                </div>
+                <div class="summary-item">
+                    <span>Credits Used:</span>
+                    <span id="creditsUsed">Loading...</span>
+                </div>
+                <div class="summary-item">
+                    <span>Credits Earned:</span>
+                    <span id="creditsEarned">Loading...</span>
+                </div>
+                <div class="summary-item total">
+                    <span>Total Amount:</span>
+                    <span id="totalAmount">Loading...</span>
+                </div>
+            </div>
+
+            <div class="invoice-footer">
+                <div class="thank-you">
+                    <p>Thank you for shopping with Trendy Collections!</p>
+                </div>
+                <div class="contact-info">
+                    <p>For customer support: support@trednycollections.com | +1-800-SAME-COM</p>
+                </div>
+                <div class="disclaimer">
+                    <p>This is a computer-generated invoice and does not require a signature.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase Configuration -->
+    <script>
+        // Initialize Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyAZM1snoXPyIu-pXMSJT_lmk9tU_jwKNyY",
+            authDomain: "samecommerce-21182.firebaseapp.com",
+            projectId: "samecommerce-21182",
+            storageBucket: "samecommerce-21182.firebasestorage.app",
+            messagingSenderId: "700905259897",
+            appId: "1:700905259897:web:17d003724512472c8825a8",
+            measurementId: "G-TC7T8GRLXX"
+        };
+
+        // Initialize Firebase with the compatibility version
+        firebase.initializeApp(firebaseConfig);
+        
+        // Get a reference to Firestore
+        const db = firebase.firestore();
+    </script>
+
+    
+    <!-- Include your updated billing.js after Firebase is initialized -->
+    <script src="billing.js"></script>
+</body>
+</html>

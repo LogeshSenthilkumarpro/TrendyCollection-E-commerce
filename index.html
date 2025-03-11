@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Trendy Collections Ecommerce</title>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header>
+    <div class="container">
+      <h1>Trendy Collections</h1>
+    </div>
+  </header>
+  
+  <nav>
+    <div class="container">
+      <a onclick="showSection('home')"><i class="fas fa-home"></i> Home</a>
+      <a onclick="showSection('myaccount')"><i class="fas fa-user"></i> My Account</a>
+      <a onclick="showSection('products')"><i class="fas fa-store"></i> Products</a>
+      <a onclick="showSection('cart')"><i class="fas fa-shopping-cart"></i> Cart</a>
+      <a onclick="showSection('history')"><i class="fas fa-history"></i> History</a>
+      <a onclick="showSection('register')"><i class="fas fa-user-plus"></i> Register</a>
+      <a onclick="showSection('login')"><i class="fas fa-sign-in-alt"></i> Login</a>
+      <a onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</a>
+      <a onclick="window.location.href='admin.html'"><i class="fas fa-user-shield"></i> Admin</a>
+    </div>
+  </nav>
+
+  <div class="container">
+    <!-- Home Section with Slider and Categories -->
+    <div id="home" class="section active">
+      <h2>Welcome to Trendy Collections!</h2>
+      <div class="slider">
+        <div id="sliderContent" class="slider-content"></div>
+        <button class="slider-btn prev" onclick="prevSlide()"><i class="fas fa-chevron-left"></i></button>
+        <button class="slider-btn next" onclick="nextSlide()"><i class="fas fa-chevron-right"></i></button>
+      </div>
+      <!-- My Account Section -->
+       
+      <div id="categorySections">
+        <div id="perfumeSection" class="category-display">
+          <h3>Perfume</h3>
+          <div id="perfumeProducts"></div>
+        </div>
+        <div id="watchSection" class="category-display">
+          <h3>Watch</h3>
+          <div id="watchProducts"></div>
+        </div>
+        <div id="dressesSection" class="category-display">
+          <h3>Dresses</h3>
+          <div id="dressesProducts"></div>
+        </div>
+        <div id="shoesSection" class="category-display">
+          <h3>Shoes</h3>
+          <div id="shoesProducts"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Register Section -->
+    <div id="register" class="section">
+      <h2>Register</h2>
+      <form id="registerForm">
+        <input type="text" id="regName" placeholder="Name" required>
+        <input type="number" id="regAge" placeholder="Age" required>
+        <input type="date" id="regDob" required>
+        <input type="email" id="regEmail" placeholder="Email" required>
+        <input type="password" id="regPassword" placeholder="Password" required>
+        <button type="submit">Register</button>
+      </form>
+      <div id="regMessage"></div>
+    </div>
+    <div id="myaccount" class="section">
+      <h2>My Account</h2>
+       <div id="accountDetails"></div>
+       </div>
+    <!-- Login Section -->
+    <div id="login" class="section">
+      <h2>Login</h2>
+      <form id="loginForm">
+        <input type="email" id="loginEmail" placeholder="Email" required>
+        <input type="password" id="loginPassword" placeholder="Password" required>
+        <button type="submit">Login</button>
+      </form>
+      <div id="loginMessage"></div>
+    </div>
+
+    <!-- Products Section -->
+    <div id="products" class="section">
+  <div class="products-header">
+    <h2>Products</h2>
+    <div class="filter-bar">
+      <div class="filter-group">
+        <label for="categoryFilter">Category:</label>
+        <select id="categoryFilter" onchange="filterProducts()">
+          <option value="all">All</option>
+          <option value="perfume">Perfume</option>
+          <option value="watch">Watch</option>
+          <option value="dresses">Dresses</option>
+          <option value="shoes">Shoes</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <label for="priceFilter">Price:</label>
+        <select id="priceFilter" onchange="filterProducts()">
+          <option value="all">All</option>
+          <option value="below100">Below $100</option>
+          <option value="above100">Above $100</option>
+        </select>
+      </div>
+    </div>
+  </div>
+  <div id="productsList"></div>
+</div>
+
+    <!-- Cart Section -->
+    <div id="cart" class="section">
+      <h2>Your Cart</h2>
+      <div id="cartList"></div>
+      <button onclick="placeOrder()">Place Order</button>
+    </div>
+
+    <!-- History Section -->
+    <div id="history" class="section">
+      <h2>Order History</h2>
+      <div id="historyList"></div>
+    </div>
+  </div>
+  <div id="popupModal" class="popup-modal" style="display: none;">
+    <div class="popup-content">
+      <p id="popupMessage"></p>
+      <button onclick="closePopup()">OK</button>
+    </div>
+  </div>
+  <!-- Payment Modal -->
+  <div id="paymentModal" class="modal" style="display: none;">
+    <div class="modal-content">
+      <h2>Payment</h2>
+      <p>Total Amount: $<span id="paymentAmount"></span></p>
+      <select id="paymentMethod">
+        <option value="credit_card">Credit Card</option>
+        <option value="debit_card">Debit Card</option>
+        <option value="paypal">PayPal</option>
+      </select>
+      <button onclick="processPayment()">Pay Now</button>
+      <button onclick="closePaymentModal()">Cancel</button>
+    </div>
+  </div>
+
+  <!-- Footer Section -->
+  <footer>
+    <div class="footer-content">
+      <div class="footer-section about">
+        <h3>About Us</h3>
+        <p>Trendy Collections offers the latest fashion trends at affordable prices. We pride ourselves on quality and customer satisfaction.</p>
+        <div class="social-links">
+          <a href="#"><i class="fab fa-facebook"></i></a>
+          <a href="#"><i class="fab fa-twitter"></i></a>
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fab fa-pinterest"></i></a>
+        </div>
+      </div>
+      
+      <div class="footer-section links">
+        <h3>Quick Links</h3>
+        <ul>
+          <li><a href="#" onclick="showSection('home'); return false;">Home</a></li>
+          <li><a href="#" onclick="showSection('products'); return false;">Shop Now</a></li>
+          <li><a href="#">Return Policy</a></li>
+          <li><a href="#">Terms & Conditions</a></li>
+          <li><a href="#">Privacy Policy</a></li>
+        </ul>
+      </div>
+      
+      <div class="footer-section contact">
+        <h3>Contact Us</h3>
+        <div class="contact-info">
+          <p><i class="fas fa-map-marker-alt"></i> 123 Fashion Street, Style City</p>
+          <p><i class="fas fa-phone"></i> +91 0452 567 8900</p>
+          <p><i class="fas fa-envelope"></i> support@trendycollections.com</p>
+        </div>
+      </div>
+      
+      <div class="footer-section newsletter">
+        <h3>Newsletter</h3>
+        <p>Subscribe to receive updates on new arrivals and special offers.</p>
+        <form class="newsletter-form">
+          <input type="email" placeholder="Enter your email">
+          <button type="submit"><i class="fas fa-paper-plane"></i></button>
+        </form>
+      </div>
+    </div>
+    
+    <div class="footer-bottom">
+      <p>© 2025 Trendy Collections. All Rights Reserved.</p>
+    </div>
+  </footer>
+
+  <script src="js/app.js"></script>
+</body>
+</html>

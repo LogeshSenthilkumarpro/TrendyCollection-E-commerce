@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Panel - Trendy Collections</title>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <h1>Admin Panel</h1>
+
+  <!-- Admin Login Section -->
+  <div id="loginSection" class="section active">
+    <h2>Admin Login</h2>
+    <form id="adminLoginForm">
+      <input type="email" id="adminEmail" value="adminlogesh@example.com" placeholder="Admin Email" required>
+      <input type="password" id="adminPassword" value="Admin123!" placeholder="Password" required>
+      <button type="submit">Login</button>
+    </form>
+    <div id="loginMessage" class="message"></div>
+  </div>
+
+  <!-- Admin Panel Section -->
+  <div id="adminPanel" class="section">
+    <nav>
+      <a onclick="showCategory('perfume')">Perfume</a>
+      <a onclick="showCategory('watch')">Watch</a>
+      <a onclick="showCategory('dresses')">Dresses</a>
+      <a onclick="showCategory('shoes')">Shoes</a>
+      <a onclick="showCategory('report')">Report Generation</a>
+      <a onclick="showCategory('usersSection')">Users</a>
+      <a onclick="logout()">Logout</a>
+    </nav>
+
+    <!-- Perfume Section -->
+    <div id="perfume" class="category-section">
+      <h2>Add/Update Perfume</h2>
+      <form id="perfumeForm">
+        <input type="text" id="perfumeProductId" placeholder="Product ID (e.g., P001)" required>
+        <input type="text" id="perfumeName" placeholder="Product Name" required>
+        <input type="text" id="perfumeDescription" placeholder="Description" required>
+        <input type="text" id="perfumeBrand" placeholder="Brand" required>
+        <input type="text" id="perfumeImageURLs" placeholder="Image URLs (comma-separated)">
+        <input type="text" id="perfumeScent" placeholder="Scent (e.g., Floral, Woody)">
+        <input type="number" id="perfumeVolume" placeholder="Volume (ml)" required>
+        <input type="number" id="perfumePrice" placeholder="Price" required>
+        <input type="number" id="perfumeStock" placeholder="Stock" required>
+        <input type="number" id="perfumeAvailability" placeholder="Availability" required>
+        <select id="perfumeCreditEligible" required>
+          <option value="true">Credit Eligible</option>
+          <option value="false">Not Credit Eligible</option>
+        </select>
+        <select id="perfumeIsActive" required>
+          <option value="true">Active</option>
+          <option value="false">Not Active</option>
+        </select>
+        <input type="number" id="perfumeCredit" placeholder="Credit Amount (max 1000)" min="0" max="1000">
+        <button type="submit">Add/Update Product</button>
+      </form>
+      <div id="perfumeMessage" class="message"></div>
+      <h3>Perfume Products</h3>
+      <div id="perfumeProductList"></div>
+    </div>
+
+    <!-- Watch Section -->
+    <div id="watch" class="category-section">
+      <h2>Add/Update Watch</h2>
+      <form id="watchForm">
+        <input type="text" id="watchProductId" placeholder="Product ID (e.g., P002)" required>
+        <input type="text" id="watchName" placeholder="Product Name" required>
+        <input type="text" id="watchDescription" placeholder="Description" required>
+        <input type="text" id="watchBrand" placeholder="Brand" required>
+        <input type="text" id="watchImageURLs" placeholder="Image URLs (comma-separated)">
+        <input type="text" id="watchType" placeholder="Type (e.g., Analog, Digital)">
+        <input type="text" id="watchMaterial" placeholder="Material (e.g., Leather, Steel)">
+        <input type="number" id="watchPrice" placeholder="Price" required>
+        <input type="number" id="watchStock" placeholder="Stock" required>
+        <input type="number" id="watchAvailability" placeholder="Availability" required>
+        <select id="watchCreditEligible" required>
+          <option value="true">Credit Eligible</option>
+          <option value="false">Not Credit Eligible</option>
+        </select>
+        <select id="watchIsActive" required>
+          <option value="true">Active</option>
+          <option value="false">Not Active</option>
+        </select>
+        <input type="number" id="watchCredit" placeholder="Credit Amount (max 1000)" min="0" max="1000">
+        <button type="submit">Add/Update Product</button>
+      </form>
+      <div id="watchMessage" class="message"></div>
+      <h3>Watch Products</h3>
+      <div id="watchProductList"></div>
+    </div>
+
+    <!-- Dresses Section -->
+    <div id="dresses" class="category-section">
+      <h2>Add/Update Dresses</h2>
+      <form id="dressesForm">
+        <input type="text" id="dressesProductId" placeholder="Product ID (e.g., P003)" required>
+        <input type="text" id="dressesName" placeholder="Product Name" required>
+        <input type="text" id="dressesDescription" placeholder="Description" required>
+        <input type="text" id="dressesBrand" placeholder="Brand" required>
+        <input type="text" id="dressesImageURLs" placeholder="Image URLs (comma-separated)">
+        <input type="text" id="dressesSize" placeholder="Size (e.g., S, M, L)">
+        <input type="text" id="dressesColor" placeholder="Color">
+        <input type="text" id="dressesMaterial" placeholder="Material (e.g., Cotton, Silk)">
+        <input type="number" id="dressesPrice" placeholder="Price" required>
+        <input type="number" id="dressesStock" placeholder="Stock" required>
+        <input type="number" id="dressesAvailability" placeholder="Availability" required>
+        <select id="dressesCreditEligible" required>
+          <option value="true">Credit Eligible</option>
+          <option value="false">Not Credit Eligible</option>
+        </select>
+        <select id="dressesIsActive" required>
+          <option value="true">Active</option>
+          <option value="false">Not Active</option>
+        </select>
+        <input type="number" id="dressesCredit" placeholder="Credit Amount (max 1000)" min="0" max="1000">
+        <button type="submit">Add/Update Product</button>
+      </form>
+      <div id="dressesMessage" class="message"></div>
+      <h3>Dresses Products</h3>
+      <div id="dressesProductList"></div>
+    </div>
+
+    <!-- Shoes Section -->
+    <div id="shoes" class="category-section">
+      <h2>Add/Update Shoes</h2>
+      <form id="shoesForm">
+        <input type="text" id="shoesProductId" placeholder="Product ID (e.g., P004)" required>
+        <input type="text" id="shoesName" placeholder="Product Name" required>
+        <input type="text" id="shoesDescription" placeholder="Description" required>
+        <input type="text" id="shoesBrand" placeholder="Brand" required>
+        <input type="text" id="shoesImageURLs" placeholder="Image URLs (comma-separated)">
+        <input type="text" id="shoesSize" placeholder="Size (e.g., 7, 8, 9)">
+        <input type="text" id="shoesColor" placeholder="Color">
+        <input type="text" id="shoesMaterial" placeholder="Material (e.g., Leather, Canvas)">
+        <input type="number" id="shoesPrice" placeholder="Price" required>
+        <input type="number" id="shoesStock" placeholder="Stock" required>
+        <input type="number" id="shoesAvailability" placeholder="Availability" required>
+        <select id="shoesCreditEligible" required>
+          <option value="true">Credit Eligible</option>
+          <option value="false">Not Credit Eligible</option>
+        </select>
+        <select id="shoesIsActive" required>
+          <option value="true">Active</option>
+          <option value="false">Not Active</option>
+        </select>
+        <input type="number" id="shoesCredit" placeholder="Credit Amount (max 1000)" min="0" max="1000">
+        <button type="submit">Add/Update Product</button>
+      </form>
+      <div id="shoesMessage" class="message"></div>
+      <h3>Shoes Products</h3>
+      <div id="shoesProductList"></div>
+    </div>
+
+    <!-- Report Generation Section -->
+    <div id="report" class="category-section">
+      <h2>Generate Reports</h2>
+      <select id="reportType">
+        <option value="customerAll">Customer - All Columns</option>
+        <option value="customerTop10">Customer - Top 10 (Date Range)</option>
+        <option value="cashPurchase">Cash Purchase (Date Range)</option>
+        <option value="creditPurchase">Credit Purchase (Date Range)</option>
+        <option value="inventoryAll">Inventory - All Products</option>
+        <option value="inventoryCategory">Inventory - Category Wise</option>
+        <option value="inventoryHighLow">Inventory - High/Low Stock</option>
+        <option value="salesAll">Sales - All (Date Range)</option>
+        <option value="salesTop10">Sales - Top 10 Items (Date Range)</option>
+        <option value="salesBottom10">Sales - Bottom 10 Items (Date Range)</option>
+      </select>
+      <input type="date" id="reportFromDate" placeholder="From Date">
+      <input type="date" id="reportToDate" placeholder="To Date">
+      <button onclick="generateReport()">Generate Report</button>
+      <div id="reportOutput"></div>
+    </div>
+
+    <!-- Users Section -->
+    <div id="usersSection" class="category-section">
+      <h2>Manage Users</h2>
+      <div id="usersList"></div>
+    </div>
+  </div>
+  <div id="popupModal" class="popup-modal" style="display: none;">
+    <div class="popup-content">
+      <p id="popupMessage"></p>
+      <button onclick="closePopup()">OK</button>
+    </div>
+  </div>
+  <script src="js/admin.js"></script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'91e393edab89bd58',t:'MTc0MTYxNzczNy4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
